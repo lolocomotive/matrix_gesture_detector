@@ -22,6 +22,8 @@ class MatrixGestureDetector extends StatefulWidget {
   ///
   final MatrixGestureDetectorCallback onMatrixUpdate;
 
+  final Function(Offset) onGestureStart;
+
   /// The [child] contained by this detector.
   ///
   /// {@macro flutter.widgets.child}
@@ -72,7 +74,8 @@ class MatrixGestureDetector extends StatefulWidget {
     this.clipChild = true,
     this.focalPointAlignment,
     this.behavior = HitTestBehavior.deferToChild,
-  })  : super(key: key);
+    required this.onGestureStart,
+  }) : super(key: key);
 
   @override
   _MatrixGestureDetectorState createState() => _MatrixGestureDetectorState();
@@ -142,6 +145,8 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
     translationUpdater.value = details.focalPoint;
     scaleUpdater.value = 1.0;
     rotationUpdater.value = 0.0;
+
+    widget.onGestureStart(details.focalPoint);
   }
 
   void onScaleUpdate(ScaleUpdateDetails details) {
@@ -157,9 +162,9 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
     }
 
     final focalPointAlignment = widget.focalPointAlignment;
-    final focalPoint = focalPointAlignment == null ?
-      details.localFocalPoint :
-      focalPointAlignment.alongSize(context.size!);
+    final focalPoint = focalPointAlignment == null
+        ? details.localFocalPoint
+        : focalPointAlignment.alongSize(context.size!);
 
     // handle matrix scaling
     if (widget.shouldScale && details.scale != 1.0) {
