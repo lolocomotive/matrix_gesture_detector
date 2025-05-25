@@ -3,7 +3,6 @@ library matrix_gesture_detector;
 import 'dart:math';
 
 import 'package:flutter/widgets.dart';
-import 'package:vector_math/vector_math_64.dart';
 
 typedef MatrixGestureDetectorCallback = void Function(
     Matrix4 matrix,
@@ -146,7 +145,7 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
     scaleUpdater.value = 1.0;
     rotationUpdater.value = 0.0;
 
-    widget.onGestureStart(details.focalPoint);
+    widget.onGestureStart(details.localFocalPoint);
   }
 
   void onScaleUpdate(ScaleUpdateDetails details) {
